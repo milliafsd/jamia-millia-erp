@@ -113,3 +113,10 @@ def add_hifz_entry(student_id, date, sabaq, sabqi, manzil, mistakes, hesitation,
               (student_id, date, sabaq, sabqi, manzil, mistakes, hesitation, status))
     conn.commit()
     conn.close()
+import os
+
+def connect():
+    # یہ لائن فائل کا صحیح راستہ ڈھونڈنے میں مدد کرے گی
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(current_dir, "jamia.db")
+    return sqlite3.connect(db_path, check_same_thread=False)
