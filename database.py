@@ -81,3 +81,35 @@ def delete_student(student_id):
     c.execute("DELETE FROM students WHERE id=?", (student_id,))
     conn.commit()
     conn.close()
+# database.py میں یہ حصہ شامل کریں
+
+def init_db():
+    conn = connect()
+    c = conn.cursor()
+    # ... پرانے ٹیبلز کے ساتھ یہ نیا ٹیبل بھی شامل کریں ...
+    c.execute("""
+    CREATE TABLE IF NOT EXISTS hifz_record(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        student_id INTEGER,
+        date TEXT,
+        sabaq TEXT,          -- نیا سبق (مثلاً پارہ 1، رکوع 2)
+        sabqi TEXT,         -- سبقی (پچھلے چند اسباق)
+        manzil TEXT,        -- منزل (پچھلا پڑھا ہوا حصہ)
+        mistakes INTEGER,    -- غلطی
+        hesitation INTEGER,  -- اٹکن
+        status TEXT,         -- حاضر / ناغہ
+        FOREIGN KEY (student_id) REFERENCES students(id)
+    )""")
+    conn.commit()
+    conn.close()
+
+# حفظ کا ریکارڈ محفوظ کرنے کا فنکشن
+def add_hifz_entry(student_id, date, sabaq, sabqi, manzil, mistakes, hesitation, status):
+    conn = connect()
+    c = conn.cursor()
+    c.execute("""INSERT INTO hifz_record 
+                 (student_id, date, sabaq, sabqi, manzil, mistakes, hesitation, status) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)""", 
+              (student_id, date, sabaq, sabqi, manzil, mistakes, hesitation, status))
+    conn.commit()
+    conn.close()
