@@ -4,7 +4,7 @@ DB="jamia.db"
 
 def connect():
 
-    conn = sqlite3.connect(DB, check_same_thread=False)
+    conn = sqlite3.connect("jamia.DB", check_same_thread=False)
 
     return conn
 
